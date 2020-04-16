@@ -5,7 +5,7 @@ services:
     build: .
     # image: jeandejavu/php-laravel:latest
     container_name: app
-    entrypoint: dockerize -wait tcp://db:3306 -timeout 40s ./.docker/entrypoint.sh
+    # entrypoint: dockerize -wait tcp://db:3306 -timeout 40s ./.docker/entrypoint.sh
     volumes:
       - .:/var/www
     networks:
@@ -15,15 +15,11 @@ services:
       - redis
   nginx:
     build: .docker/nginx
-    entrypoint: dockerize -template /etc/nginx/nginx.tmpl:/etc/nginx/conf.d/nginx.conf nginx -g "daemon off;"
     container_name: laravel-nginx
     restart: always
     tty: true
     ports:
       - "8000:80"
-    environment:
-      - PHP_FPM_HOST=app
-      - PHP_FPM_PORT=9000
     volumes:
       - .:/var/www
     networks:
